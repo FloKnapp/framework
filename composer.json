@@ -20,10 +20,14 @@
         }
     },
     "require": {
-        "tflori/orm": "1.8.*"
+        "tflori/orm": "1.8.*",
+        "psr": ""
     },
     "require-dev": {
         "phpunit/phpunit": "9.0.*"
+    },
+    "scripts": {
+        "tests": "./bin/runTests.sh"
     },
     "minimum-stability": "stable"
 }

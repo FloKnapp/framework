@@ -9,9 +9,15 @@ namespace Framework;
 class App
 {
 
-    const ENV_PROD = 'production';
-    const ENV_STAGING = 'staging';
-    const ENV_DEV = 'development';
+    const EVENT_EXCEPTION = 'app.exception';
+    const EVENT_ROUTE_FOUND = 'app.route.found';
+    const EVENT_ROUTE_DISPATCH = 'app.route.dispatch';
+    const EVENT_CONTROLLER_FOUND = 'app.controller.found';
+    const EVENT_CONTROLLER_RENDER = 'app.controller.render';
+
+    const ENVIRONMENT_PROD = 'production';
+    const ENVIRONMENT_STAGING = 'staging';
+    const ENVIRONMENT_DEV = 'development';
 
     /** @var static */
     private self $instance;
@@ -23,7 +29,7 @@ class App
      * App constructor.
      * @param string $environment
      */
-    private function __construct($environment = self::ENV_PROD)
+    private function __construct($environment = self::ENVIRONMENT_PROD)
     {
         $this->environment = $environment;
     }
@@ -33,13 +39,36 @@ class App
      *
      * @return static
      */
-    public function create($environment = self::ENV_PROD): self
+    public function create($environment = self::ENVIRONMENT_PROD): self
     {
         if (!$this->instance) {
             $this->instance = new static($environment);
         }
 
         return $this->instance;
+    }
+
+    public function run()
+    {
+        $this->registerEnvironmentVariables();
+        $this->registerEvents();
+
+
+    }
+
+    private function registerEnvironmentVariables()
+    {
+
+    }
+
+    private function registerEvents()
+    {
+
+    }
+
+    private function createRequest()
+    {
+
     }
 
 }
