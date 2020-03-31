@@ -1,7 +1,11 @@
 <?php
 
-namespace Framework\Event;
+namespace Framework\EventDispatcher;
 
+/**
+ * Class Observer
+ * @package Framework\EventDispatcher
+ */
 class Observer
 {
 

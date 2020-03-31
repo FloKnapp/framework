@@ -2,7 +2,7 @@
 
 namespace Framework\Tests\Fixtures;
 
-use Framework\Event\EventSubscriberInterface;
+use Framework\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class TestSubscriber

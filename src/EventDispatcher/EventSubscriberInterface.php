@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Framework\Event;
+namespace Framework\EventDispatcher;
 
 
 interface EventSubscriberInterface

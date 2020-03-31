@@ -6,7 +6,7 @@ namespace Framework\Controller;
  * Class AbstractRestfulController
  * @package Framework\Controller
  */
-class AbstractRestfulController
+abstract class AbstractRestfulController
 {
 
     /**
