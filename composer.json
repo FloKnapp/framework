@@ -1,6 +1,6 @@
 {
     "name": "webasics/framework",
-    "description": "Next gen framework",
+    "description": "Fast and reliable framework for intuitive development of web applications.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -37,7 +37,9 @@
         "phpunit/phpunit": "9.0.*"
     },
     "scripts": {
-        "tests": "./vendor/bin/phpunit -c phpunit.xml "
+        "tests": "./vendor/bin/phpunit -c phpunit.xml",
+        "start": "./bin/start.sh"
     },
+    "bin": "./bin/webasics-start.sh",
     "minimum-stability": "stable"
 }
