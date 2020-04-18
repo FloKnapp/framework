@@ -2,6 +2,14 @@
 
 namespace Framework;
 
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Request;
+use Webasics\Framework\Exceptions\InvalidResponseException;
+use Webasics\Framework\Exceptions\NotFoundException;
+use Webasics\Framework\Route\Dispatcher;
+use Webasics\Framework\Route\RouteCollection;
+use Webasics\Framework\Route\Router;
+
 /**
  * Class App
  * @package Framework
@@ -20,7 +28,7 @@ class App
     const ENVIRONMENT_DEV = 'development';
 
     /** @var static */
-    private self $instance;
+    private static App $instance;
 
     /** @var string */
     private string $environment;
@@ -39,21 +47,34 @@ class App
      *
      * @return static
      */
-    public function create($environment = self::ENVIRONMENT_PROD): self
+    public static function init($environment = self::ENVIRONMENT_PROD): self
     {
-        if (!$this->instance) {
-            $this->instance = new static($environment);
+        if (!self::$instance) {
+            self::$instance = new static($environment);
         }
 
-        return $this->instance;
+        return self::$instance;
     }
 
+    /**
+     * @throws InvalidResponseException
+     * @throws NotFoundException
+     */
     public function run()
     {
+        $factory = new Psr17Factory();
+        $request  = $factory->createRequest($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+
+        $routeCollection = new RouteCollection();
+
+        $dispatcher = new Dispatcher();
+
+        $router = new Router($dispatcher, $routeCollection);
+
         $this->registerEnvironmentVariables();
         $this->registerEvents();
 
-
+        $router->dispatch($request);
     }
 
     private function registerEnvironmentVariables()

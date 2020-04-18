@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Controller;
+namespace Webasics\Framework\Controller;
 
 /**
  * Class AbstractRestfulController

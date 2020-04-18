@@ -1,5 +1,13 @@
-<testsuites>
-    <testsuite name="My whole project">
-        <directory>./tests</directory>
-    </testsuite>
-</testsuites>
+<phpunit bootstrap="tests/bootstrap.php">
+    <testsuites>
+        <testsuite name="My whole project">
+            <directory>./tests</directory>
+
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>

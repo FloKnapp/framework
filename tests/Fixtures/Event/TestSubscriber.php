@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Tests\Fixtures;
+namespace Webasics\Framework\Tests\Fixtures;
 
-use Framework\EventDispatcher\EventSubscriberInterface;
+use Webasics\Framework\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class TestSubscriber
