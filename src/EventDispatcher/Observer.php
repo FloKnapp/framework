@@ -9,10 +9,15 @@ namespace Webasics\Framework\EventDispatcher;
 class Observer
 {
 
+    /** @var array */
+    private array $listener;
+
     /**
+     * Notify subscribers
      *
+     * @param string $eventName
      */
-    public function notify()
+    public function notify(string $eventName)
     {
         // TODO: Implement notify() method.
     }

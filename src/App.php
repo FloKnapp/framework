@@ -3,10 +3,13 @@
 namespace Framework;
 
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Nyholm\Psr7\Request;
+use Psr\Http\Message\RequestInterface;
+use Webasics\Framework\DependencyInjection\Container;
+use Webasics\Framework\EventDispatcher\Observer;
 use Webasics\Framework\Exceptions\InvalidResponseException;
 use Webasics\Framework\Exceptions\NotFoundException;
 use Webasics\Framework\Route\Dispatcher;
+use Webasics\Framework\Route\Initializer;
 use Webasics\Framework\Route\RouteCollection;
 use Webasics\Framework\Route\Router;
 
@@ -36,6 +39,8 @@ class App
     /**
      * App constructor.
      * @param string $environment
+     *
+     * @codeCoverageIgnore
      */
     private function __construct($environment = self::ENVIRONMENT_PROD)
     {
@@ -46,8 +51,10 @@ class App
      * @param string $environment
      *
      * @return static
+     *
+     * @codeCoverageIgnore
      */
-    public static function init($environment = self::ENVIRONMENT_PROD): self
+    public static function load($environment = self::ENVIRONMENT_PROD): self
     {
         if (!self::$instance) {
             self::$instance = new static($environment);
@@ -59,35 +66,40 @@ class App
     /**
      * @throws InvalidResponseException
      * @throws NotFoundException
+     *
+     * @codeCoverageIgnore
      */
     public function run()
     {
+        $container = new Container();
+        $observer  = new Observer();
+
+        $container->set(Observer::class, $observer);
+
         $factory = new Psr17Factory();
         $request  = $factory->createRequest($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 
+        $container->set(RequestInterface::class, $request);
+
+        $initializer     = new Initializer($container);
+        $dispatcher      = new Dispatcher($initializer);
         $routeCollection = new RouteCollection();
+        $router          = new Router($dispatcher, $routeCollection);
 
-        $dispatcher = new Dispatcher();
+        $container->set(Router::class, $router);
 
-        $router = new Router($dispatcher, $routeCollection);
+        static::registerEnvironmentVariables();
+        static::registerEvents();
 
-        $this->registerEnvironmentVariables();
-        $this->registerEvents();
-
-        $router->dispatch($request);
+        return (string)$router->dispatch($request)->getBody();
     }
 
-    private function registerEnvironmentVariables()
+    private static function registerEnvironmentVariables()
     {
 
     }
 
-    private function registerEvents()
-    {
-
-    }
-
-    private function createRequest()
+    private static function registerEvents()
     {
 
     }

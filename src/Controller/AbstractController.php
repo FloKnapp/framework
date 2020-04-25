@@ -6,9 +6,13 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Webasics\Framework\DependencyInjection\ContainerAwareInterface;
+use Webasics\Framework\DependencyInjection\ContainerAwareTrait;
 
-abstract class AbstractController
+abstract class AbstractController implements ContainerAwareInterface
 {
+
+    use ContainerAwareTrait;
 
     /** @var RequestInterface */
     private RequestInterface $request;

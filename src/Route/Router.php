@@ -2,7 +2,6 @@
 
 namespace Webasics\Framework\Route;
 
-use http\Env\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Webasics\Framework\Exceptions\InvalidResponseException;

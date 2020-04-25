@@ -34,12 +34,11 @@
         "nyholm/psr7-server": "0.4.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "9.0.*"
+        "phpunit/phpunit": "8.5.*"
     },
     "scripts": {
-        "tests": "./vendor/bin/phpunit -c phpunit.xml",
-        "start": "./bin/start.sh"
+        "tests": "./vendor/bin/phpunit -c phpunit.xml"
     },
-    "bin": "./bin/webasics-start.sh",
+    "bin": "bin/webasics-full-install.sh",
     "minimum-stability": "stable"
 }

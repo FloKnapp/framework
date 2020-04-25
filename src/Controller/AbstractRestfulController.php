@@ -8,13 +8,4 @@ namespace Webasics\Framework\Controller;
  */
 abstract class AbstractRestfulController
 {
-
-    /**
-     * @return string
-     */
-    public function get()
-    {
-
-    }
-
 }

@@ -2,10 +2,8 @@
 
 namespace Webasics\Framework\Route;
 
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Webasics\Framework\Exceptions\InvalidResponseException;
-use Webasics\Framework\Exceptions\MethodNotFoundException;
 use Webasics\Framework\Exceptions\NotFoundException;
 
 /**
@@ -14,6 +12,17 @@ use Webasics\Framework\Exceptions\NotFoundException;
  */
 class Dispatcher
 {
+
+    private Initializer $initializer;
+
+    /**
+     * Dispatcher constructor.
+     * @param Initializer $initializer
+     */
+    public function __construct(Initializer $initializer)
+    {
+        $this->initializer = $initializer;
+    }
 
     /**
      * @param RouteItem $routeItem
@@ -29,8 +38,10 @@ class Dispatcher
         $classObj = new $classStr();
 
         if (!method_exists($classObj, $action)) {
-            throw new NotFoundException();
+            throw new NotFoundException('Method not found in "' . $classStr. '".');
         }
+
+        $classObj = $this->initializer->loadClass($classStr);
 
         $result = call_user_func_array([$classObj, $action], $routeItem->getParameters());
 

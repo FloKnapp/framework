@@ -3,10 +3,10 @@
 namespace Webasics\Framework\Exceptions;
 
 /**
- * Class RouterException
+ * Class InitializerException
  * @package Webasics\Framework\Exceptions
  */
-class RouterException extends \Exception
+class InitializerException extends \Exception
 {
 
 }

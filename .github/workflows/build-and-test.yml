@@ -22,3 +22,9 @@ jobs:
 
     - name: Run test suite
       run: composer run-script tests
+
+    - name: Build image
+      run: docker build -t webasics/framework:latest -t webasics/framework:$GITHUB_RUN_NUMBER
+
+    - name: Push image
+      run: docker push webasics/framework
