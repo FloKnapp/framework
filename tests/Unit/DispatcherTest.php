@@ -3,6 +3,7 @@
 namespace Webasics\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Psr\Http\Message\ResponseInterface;
 use Webasics\Framework\DependencyInjection\Container;
 use Webasics\Framework\Route\RouteItem;
@@ -25,7 +26,14 @@ class DispatcherTest extends TestCase
 
     public function setUp(): void
     {
-        $this->dispatcher = new Dispatcher(new Initializer($this->prophesize(Container::class)->reveal()));
+        $container = $this->prophesize(Container::class);
+        $container->has(Argument::any())->willReturn(false);
+        $container->set(Argument::any(), Argument::any())->willReturn(null);
+
+        $initializer = $this->prophesize(Initializer::class);
+        $initializer->willBeConstructedWith([$container->reveal()]);
+
+        $this->dispatcher = new Dispatcher(new Initializer($container->reveal()));
     }
 
     /**

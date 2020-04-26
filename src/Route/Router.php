@@ -4,7 +4,9 @@ namespace Webasics\Framework\Route;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Webasics\Framework\Route\RouteItem;
+use Webasics\Framework\Event\ObserverAwareInterface;
+use Webasics\Framework\Event\ObserverAwareTrait;
+use Webasics\Framework\Exceptions\InitializerException;
 use Webasics\Framework\Exceptions\InvalidResponseException;
 use Webasics\Framework\Exceptions\NotFoundException;
 use Webasics\Framework\Helper\ArrayHelper;
@@ -13,8 +15,10 @@ use Webasics\Framework\Helper\ArrayHelper;
  * Class Router
  * @package Framework\Route
  */
-class Router
+class Router implements ObserverAwareInterface
 {
+
+    use ObserverAwareTrait;
 
     /** @var Dispatcher */
     private Dispatcher $dispatcher;
@@ -54,6 +58,7 @@ class Router
      *
      * @throws NotFoundException
      * @throws InvalidResponseException
+     * @throws InitializerException
      */
     public function dispatch(RequestInterface $request):? ResponseInterface
     {

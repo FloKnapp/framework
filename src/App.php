@@ -7,8 +7,8 @@ use Nyholm\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use Webasics\Framework\Configuration\Config;
 use Webasics\Framework\DependencyInjection\Container;
-use Webasics\Framework\EventDispatcher\Event\RequestCreateEvent;
-use Webasics\Framework\EventDispatcher\Observer;
+use Webasics\Framework\Event\Event\RequestCreateEvent;
+use Webasics\Framework\Event\Observer;
 use Webasics\Framework\Exceptions\InvalidResponseException;
 use Webasics\Framework\Exceptions\NotFoundException;
 use Webasics\Framework\Route\Dispatcher;
@@ -60,10 +60,12 @@ class App
      */
     public function run()
     {
-        $container = new Container();
+        $container   = new Container();
+        $initializer = new Initializer($container);
+
         $container->set(Config::class, $this->config);
 
-        $observer  = new Observer($this->config->get('eventListener') ?? []);
+        $observer  = $initializer->loadClass(Observer::class, $this->config->get('eventListener') ?? []);
         $container->set(Observer::class, $observer);
 
         $request = $this->createRequestFromHeaders();
@@ -71,15 +73,15 @@ class App
 
         $observer->notify(App::EVENT_REQUEST_CREATE, $request);
 
-        $initializer = new Initializer($container);
+
         $dispatcher  = new Dispatcher($initializer);
         $router      = new Router($dispatcher, $this->config->get('routes'));
-
-        $observer->notify(App::EVENT_ROUTE_FOUND, $router);
 
         $container->set(Router::class, $router);
 
         static::registerEnvironmentVariables();
+
+        $observer->notify(App::EVENT_ROUTE_DISPATCH, $router);
 
         return (string)$router->dispatch($request)->getBody();
     }

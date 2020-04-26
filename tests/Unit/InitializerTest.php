@@ -29,6 +29,8 @@ class InitializerTest extends TestCase
         $container->get(Argument::is(Router::class))
             ->willReturn($this->prophesize(Router::class)->reveal());
 
+        $container->has(Argument::any())->willReturn(true);
+
         $initializer = new Initializer($container->reveal());
 
         $result = $initializer->loadClass(TestAwareController::class);
@@ -48,6 +50,8 @@ class InitializerTest extends TestCase
 
         $container->get(Argument::is(Router::class))
             ->willReturn($this->prophesize(Router::class)->reveal());
+
+        $container->has(Argument::any())->willReturn(true);
 
         $initializer = new Initializer($container->reveal());
 

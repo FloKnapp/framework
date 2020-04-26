@@ -5,7 +5,7 @@ namespace Webasics\Tests\Fixtures\Event;
 use Nyholm\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
 use Webasics\Framework\App;
-use Webasics\Framework\EventDispatcher\EventListenerInterface;
+use Webasics\Framework\Event\EventListenerInterface;
 
 /**
  * Class TestListener

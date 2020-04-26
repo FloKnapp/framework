@@ -27,19 +27,29 @@ class Initializer
 
     /**
      * @param string $class
+     * @param array $constructorArgs
      * @return object
      *
      * @throws InitializerException
      * @throws NotFoundException
      */
-    public function loadClass(string $class)
+    public function loadClass(string $class, ...$constructorArgs)
     {
         if (false === class_exists($class)) {
             throw new InitializerException('Class "' . $class . '" doesn\'t exist and couldn\'t be loaded.');
         }
 
         $dependencies = $this->getClassDependencies($class);
-        $classObj     = new $class();
+
+        if (empty($constructorArgs)) {
+            $classObj = new $class();
+        } else {
+            $classObj = new $class(...$constructorArgs);
+        }
+
+        if (!$this->container->has($class)) {
+            $this->container->set($class, $classObj);
+        }
 
         foreach ($dependencies as $setter => $dependency) {
 

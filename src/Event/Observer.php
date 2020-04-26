@@ -1,6 +1,6 @@
 <?php
 
-namespace Webasics\Framework\EventDispatcher;
+namespace Webasics\Framework\Event;
 
 /**
  * Class Observer
