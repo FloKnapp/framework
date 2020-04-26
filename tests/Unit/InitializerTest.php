@@ -6,9 +6,11 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Webasics\Framework\DependencyInjection\Container;
+use Webasics\Framework\Exceptions\InitializerException;
 use Webasics\Framework\Route\Initializer;
 use Webasics\Framework\Route\Router;
 use Webasics\Tests\Fixtures\Controller\TestAwareController;
+use Webasics\Tests\Fixtures\Controller\TestAwareMissingMethodsController;
 
 /**
  * Class InitializerTest
@@ -24,13 +26,32 @@ class InitializerTest extends TestCase
     {
         /** @var Container|ObjectProphecy $container */
         $container = $this->prophesize(Container::class);
-        $container->get(Argument::is(Router::class))->willReturn($this->prophesize(Router::class)->reveal());
+        $container->get(Argument::is(Router::class))
+            ->willReturn($this->prophesize(Router::class)->reveal());
 
         $initializer = new Initializer($container->reveal());
 
         $result = $initializer->loadClass(TestAwareController::class);
 
         self::assertInstanceOf(TestAwareController::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldThrowAnExceptionForInvalidClass()
+    {
+        self::expectException(InitializerException::class);
+
+        /** @var Container|ObjectProphecy $container */
+        $container = $this->prophesize(Container::class);
+
+        $container->get(Argument::is(Router::class))
+            ->willReturn($this->prophesize(Router::class)->reveal());
+
+        $initializer = new Initializer($container->reveal());
+
+        $result = $initializer->loadClass(NonExistentController::class);
     }
 
 }

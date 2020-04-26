@@ -12,6 +12,7 @@ use Webasics\Framework\Route\Dispatcher;
 use Webasics\Framework\Route\RouteCollection;
 use Webasics\Framework\Route\RouteItem;
 use Webasics\Framework\Route\Router;
+use Webasics\Tests\Fixtures\Controller\TestAwareController;
 use Webasics\Tests\Fixtures\Controller\TestController;
 
 class RouterTest extends TestCase
@@ -30,13 +31,18 @@ class RouterTest extends TestCase
             'class'  => TestController::class,
             'action' => 'dynamicPath'
         ],
+        'router_aware_controller' => [
+            'path'   => '/routerAware',
+            'class'  => TestAwareController::class,
+            'action' => 'routerAware'
+        ],
         'invalid_response' => [
             'path' => '/test/invalid_response',
             'class' => TestController::class,
             'action' => 'invalidResponse'
         ],
         'invalid_method' => [
-            'path' => '/test/invalid_response',
+            'path' => '/test/invalid_method',
             'class' => TestController::class,
             'action' => 'invalidMethod'
         ]
@@ -49,11 +55,9 @@ class RouterTest extends TestCase
     {
         /** @var Dispatcher|ObjectProphecy $dispatcher */
         $dispatcher = $this->prophesize(Dispatcher::class);
-        $dispatcher->dispatch(Argument::any())->willReturn($this->prophesize(ResponseInterface::class));
+        $dispatcher->forward(Argument::any())->willReturn($this->prophesize(ResponseInterface::class));
 
-        $routeCollection = new RouteCollection(self::ROUTE_COLLECTION);
-
-        $this->router = new Router($dispatcher->reveal(), $routeCollection);
+        $this->router = new Router($dispatcher->reveal(), self::ROUTE_COLLECTION);
     }
 
     /**

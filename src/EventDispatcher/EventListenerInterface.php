@@ -4,7 +4,7 @@
 namespace Webasics\Framework\EventDispatcher;
 
 
-interface EventSubscriberInterface
+interface EventListenerInterface
 {
 
     /**
@@ -28,6 +28,6 @@ interface EventSubscriberInterface
      *
      * @return array
      */
-    public static function getSubscribedEvents();
+    public static function configure();
 
 }

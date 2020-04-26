@@ -2,7 +2,10 @@
 
 namespace Webasics\Framework\Route;
 
+use Webasics\Framework\App;
 use Psr\Http\Message\ResponseInterface;
+use Webasics\Framework\Route\RouteItem;
+use Webasics\Framework\Exceptions\InitializerException;
 use Webasics\Framework\Exceptions\InvalidResponseException;
 use Webasics\Framework\Exceptions\NotFoundException;
 
@@ -30,15 +33,16 @@ class Dispatcher
      *
      * @throws InvalidResponseException
      * @throws NotFoundException
+     * @throws InitializerException
      */
-    public function dispatch(RouteItem $routeItem): ResponseInterface
+    public function forward(RouteItem $routeItem): ResponseInterface
     {
         $classStr = $routeItem->getClass();
         $action   = $routeItem->getAction();
         $classObj = new $classStr();
 
         if (!method_exists($classObj, $action)) {
-            throw new NotFoundException('Method not found in "' . $classStr. '".');
+            throw new NotFoundException(sprintf(App::ERR_METHOD_NOT_FOUND_IN_CLASS, $action, $classStr));
         }
 
         $classObj = $this->initializer->loadClass($classStr);
@@ -46,7 +50,7 @@ class Dispatcher
         $result = call_user_func_array([$classObj, $action], $routeItem->getParameters());
 
         if (!$result instanceof ResponseInterface) {
-            throw new InvalidResponseException('Controller action doesn\'t return a valid response.');
+            throw new InvalidResponseException(App::ERR_CONTROLLER_INVALID_RESPONSE);
         }
 
         return $result;

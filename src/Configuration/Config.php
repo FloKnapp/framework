@@ -1,19 +1,19 @@
 <?php
 
-namespace Webasics\Framework\Config;
+namespace Webasics\Framework\Configuration;
 
 /**
- * Class Configuration
+ * Class Config
  * @package Webasics\Framework\Config
  */
-class Configuration
+class Config
 {
 
     /** @var array */
     private array $config;
 
     /**
-     * Configuration constructor.
+     * Config constructor.
      * @param array $config
      */
     public function __construct(array $config)

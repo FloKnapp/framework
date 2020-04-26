@@ -21,4 +21,12 @@ trait RouterAwareTrait
         $this->router = $router;
     }
 
+    /**
+     * @return Router
+     */
+    public function getRouter(): Router
+    {
+        return $this->router;
+    }
+
 }

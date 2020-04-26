@@ -28,7 +28,7 @@ abstract class AbstractController implements ContainerAwareInterface
     public function render(string $template, array $parameters = [])
     {
         $body = new Psr17Factory();
-        $body = $body->createStream('test');
+        $body = $body->createStream($template);
 
 
         return new Response(200, [], $body);

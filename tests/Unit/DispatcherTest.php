@@ -3,16 +3,15 @@
 namespace Webasics\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Webasics\Framework\DependencyInjection\Container;
+use Webasics\Framework\Route\RouteItem;
+use Webasics\Framework\Exceptions\InitializerException;
 use Webasics\Framework\Exceptions\InvalidResponseException;
-use Webasics\Framework\Exceptions\MethodNotFoundException;
 use Webasics\Framework\Exceptions\NotFoundException;
+use Webasics\Framework\Helper\ArrayHelper;
 use Webasics\Framework\Route\Dispatcher;
 use Webasics\Framework\Route\Initializer;
-use Webasics\Framework\Route\RouteCollection;
 
 /**
  * Class DispatcherTest
@@ -30,16 +29,25 @@ class DispatcherTest extends TestCase
     }
 
     /**
+     * @param string $name
+     * @param array  $data
+     * @return RouteItem
+     */
+    private function createRouteEntity(string $name, array $data)
+    {
+        return new RouteItem($name, $data['path'], $data['class'], $data['action'], $data['parameters'] ?? []);
+    }
+
+    /**
      * @test
      *
      * @throws InvalidResponseException
      * @throws NotFoundException
+     * @throws InitializerException
      */
     public function itShouldReturnValidResponse()
     {
-        $routeCollection = new RouteCollection(RouterTest::ROUTE_COLLECTION);
-
-        $result = $this->dispatcher->dispatch($routeCollection->get('test'));
+        $result = $this->dispatcher->forward($this->createRouteEntity('test', RouterTest::ROUTE_COLLECTION['test']));
 
         self::assertInstanceOf(ResponseInterface::class, $result);
     }
@@ -54,9 +62,7 @@ class DispatcherTest extends TestCase
     {
         self::expectException(InvalidResponseException::class);
 
-        $routeCollection = new RouteCollection(RouterTest::ROUTE_COLLECTION);
-
-        $this->dispatcher->dispatch($routeCollection->get('invalid_response'));
+        $this->dispatcher->forward($this->createRouteEntity('invalid_response', RouterTest::ROUTE_COLLECTION['invalid_response']));
     }
 
     /**
@@ -69,9 +75,7 @@ class DispatcherTest extends TestCase
     {
         self::expectException(NotFoundException::class);
 
-        $routeCollection = new RouteCollection(RouterTest::ROUTE_COLLECTION);
-
-        $this->dispatcher->dispatch($routeCollection->get('invalid_method'));
+        $this->dispatcher->forward($this->createRouteEntity('invalid_method', RouterTest::ROUTE_COLLECTION['invalid_method']));
     }
 
 }

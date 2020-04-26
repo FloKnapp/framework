@@ -4,7 +4,7 @@ namespace Webasics\Framework\Route;
 
 use Webasics\Framework\DependencyInjection\Container;
 use Webasics\Framework\Exceptions\InitializerException;
-use Webasics\Tests\Fixtures\Controller\TestController;
+use Webasics\Framework\Exceptions\NotFoundException;
 
 /**
  * Class Initializer
@@ -30,41 +30,40 @@ class Initializer
      * @return object
      *
      * @throws InitializerException
+     * @throws NotFoundException
      */
     public function loadClass(string $class)
     {
-        try {
+        if (false === class_exists($class)) {
+            throw new InitializerException('Class "' . $class . '" doesn\'t exist and couldn\'t be loaded.');
+        }
 
-            $dependencies = $this->getClassDependencies($class);
-            $classObj     = new $class();
+        $dependencies = $this->getClassDependencies($class);
+        $classObj     = new $class();
 
-            foreach ($dependencies as $setter => $dependency) {
+        foreach ($dependencies as $setter => $dependency) {
 
-                if (class_exists($dependency)) {
+            if (class_exists($dependency)) {
 
-                    if ($dependency === Container::class) {
-                        $classObj->$setter($this->container);
-                        continue;
-                    }
-
-                    $classObj->$setter($this->container->get($dependency));
-
+                if ($dependency === Container::class) {
+                    $classObj->$setter($this->container);
+                    continue;
                 }
+
+                $classObj->$setter($this->container->get($dependency));
 
             }
 
-            return $classObj;
-
-        } catch (\Throwable $e) {
-            throw new InitializerException($e->getMessage());
         }
+
+        return $classObj;
     }
 
     /**
      * @param string $class
      * @return array
      *
-     * @throws \ReflectionException
+     * @throws InitializerException
      */
     private function getClassDependencies(string $class): array
     {
@@ -81,30 +80,37 @@ class Initializer
     /**
      * @param $interface
      * @return array
-     * @throws \ReflectionException
+     *
+     * @throws InitializerException
      */
     private function getInterfaceClassDependencies(string $interface): array
     {
-        $dependencies = [];
-        $reflection   = new \ReflectionClass($interface);
+        try {
 
-        foreach ($reflection->getMethods() as $method) {
+            $dependencies = [];
+            $reflection   = new \ReflectionClass($interface);
 
-            if (0 !== strpos($method->getName(), 'set')) {
-                continue;
-            }
+            foreach ($reflection->getMethods() as $method) {
 
-            foreach ($method->getParameters() as $parameter) {
+                if (0 !== strpos($method->getName(), 'set')) {
+                    continue;
+                }
 
-                if ($parameter->getClass()) {
-                    $dependencies[$method->getName()] = $parameter->getClass()->getName();
+                foreach ($method->getParameters() as $parameter) {
+
+                    if ($parameter->getClass()) {
+                        $dependencies[$method->getName()] = $parameter->getClass()->getName();
+                    }
+
                 }
 
             }
 
-        }
+            return $dependencies;
 
-        return $dependencies;
+        } catch (\ReflectionException $e) {
+            throw new InitializerException('Error while detecting class dependencies: ' . $e->getMessage());
+        }
 
     }
 

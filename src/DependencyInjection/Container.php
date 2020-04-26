@@ -44,10 +44,15 @@ class Container implements ContainerInterface
     /**
      * @param string $id
      * @param object $object
+     * @param array  $aliases
      */
-    public function set(string $id, object $object)
+    public function set(string $id, object $object, ...$aliases)
     {
         $this->dependencies[$id] = $object;
+
+        foreach ($aliases as $alias) {
+            $this->dependencies[$alias] = $this->dependencies[$id];
+        }
     }
 
 }

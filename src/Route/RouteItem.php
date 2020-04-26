@@ -6,7 +6,7 @@ namespace Webasics\Framework\Route;
  * Class RouteConfig
  * @package Webasics\Framework\Route
  */
-class RouteItem implements \ArrayAccess
+class RouteItem
 {
 
     /** @var string */
@@ -103,26 +103,6 @@ class RouteItem implements \ArrayAccess
         ];
 
         return $item;
-    }
-
-    public function offsetExists($offset)
-    {
-        return !empty($this->$offset);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->$offset;
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        $this->$offset = $value;
-    }
-
-    public function offsetUnset($offset)
-    {
-        unset($this->$offset);
     }
 
 }

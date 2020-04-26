@@ -1,4 +1,4 @@
-name: Build
+name: Build and run tests
 
 on:
   push:
@@ -20,11 +20,8 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
 
+  tests:
+
     - name: Run test suite
       run: composer run-script tests
 
-    - name: Build image
-      run: docker build -t webasics/framework:latest -t webasics/framework:$GITHUB_RUN_NUMBER
-
-    - name: Push image
-      run: docker push webasics/framework

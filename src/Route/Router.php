@@ -4,8 +4,10 @@ namespace Webasics\Framework\Route;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Webasics\Framework\Route\RouteItem;
 use Webasics\Framework\Exceptions\InvalidResponseException;
 use Webasics\Framework\Exceptions\NotFoundException;
+use Webasics\Framework\Helper\ArrayHelper;
 
 /**
  * Class Router
@@ -17,18 +19,18 @@ class Router
     /** @var Dispatcher */
     private Dispatcher $dispatcher;
 
-    /** @var RouteCollection */
-    private RouteCollection $routes;
+    /** @var RouteItem[] */
+    private array $routes;
 
     /**
      * Router constructor.
-     * @param Dispatcher      $dispatcher
-     * @param RouteCollection $routes
+     * @param Dispatcher $dispatcher
+     * @param array      $routes
      */
-    public function __construct(Dispatcher $dispatcher, RouteCollection $routes)
+    public function __construct(Dispatcher $dispatcher, array $routes)
     {
         $this->dispatcher = $dispatcher;
-        $this->routes     = $routes;
+        $this->routes     = $this->transformArrayRoutes($routes);
     }
 
     /**
@@ -39,7 +41,11 @@ class Router
      */
     public function getRoute(string $name): RouteItem
     {
-        return $this->routes->get($name);
+        if (empty($this->routes[$name])) {
+            throw new NotFoundException('Route with name "' . $name . '" not found.');
+        }
+
+        return $this->routes[$name];
     }
 
     /**
@@ -51,8 +57,8 @@ class Router
      */
     public function dispatch(RequestInterface $request):? ResponseInterface
     {
-        $routeItem = $this->matchPath($request);
-        return $this->dispatcher->dispatch($routeItem);
+        $route = $this->matchPath($request);
+        return $this->dispatcher->forward($route);
     }
 
     /**
@@ -99,7 +105,22 @@ class Router
 
         }
 
-        throw new NotFoundException('Route with path "' . $request->getUri()->getPath() . '" couldn\'t be matched.');
+        throw new NotFoundException('No matching route for path "' . $request->getUri()->getPath() . '" found.');
+    }
+
+    private function transformArrayRoutes(array $routes)
+    {
+        $result = [];
+
+        foreach ($routes as $name => $route) {
+
+            $arr = $route;
+            $arr['name'] = $name;
+
+            $result[$name] = ArrayHelper::arrayToObject($arr, RouteItem::class);
+        }
+
+        return $result;
     }
 
 }

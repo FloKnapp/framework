@@ -2,7 +2,6 @@
 
 namespace Webasics\Tests\Fixtures\Controller;
 
-use Psr\Http\Message\ResponseInterface;
 use Webasics\Framework\Controller\AbstractController;
 use Webasics\Framework\DependencyInjection\ContainerAwareInterface;
 use Webasics\Framework\Route\RouterAwareInterface;
@@ -16,5 +15,10 @@ class TestAwareController extends AbstractController implements ContainerAwareIn
 {
 
     use RouterAwareTrait;
+
+    public function routerAware()
+    {
+        return $this->render($this->getRouter()->getRoute('test')->getAction());
+    }
 
 }

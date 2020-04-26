@@ -3,7 +3,7 @@
 namespace Webasics\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Webasics\Framework\Config\Configuration;
+use Webasics\Framework\Configuration\Config;
 
 /**
  * Class ConfigurationTest
@@ -17,7 +17,7 @@ class ConfigurationTest extends TestCase
      */
     public function itShouldResolveNamespace()
     {
-        $config = new Configuration([
+        $config = new Config([
             'test' => 'test_value'
         ]);
 
@@ -29,7 +29,7 @@ class ConfigurationTest extends TestCase
      */
     public function itShouldResolveNamespaceRecursive()
     {
-        $config = new Configuration([
+        $config = new Config([
             'test' => [
                 'test2' => 'test_value'
             ]
@@ -43,7 +43,7 @@ class ConfigurationTest extends TestCase
      */
     public function itShouldResolveNamespaceRecursiveAgain()
     {
-        $config = new Configuration([
+        $config = new Config([
             'test' => [
                 'test2' => [
                     'test3' => 'test_value'
@@ -60,7 +60,7 @@ class ConfigurationTest extends TestCase
      */
     public function itShouldReturnNullForInvalidNamespace()
     {
-        $config = new Configuration([
+        $config = new Config([
             'test' => [
                 'test2' => [
                     'test3' => 'test_value'
