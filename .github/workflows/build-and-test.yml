@@ -22,6 +22,7 @@ jobs:
 
   tests:
 
+    steps:
     - name: Run test suite
       run: composer run-script tests
 
