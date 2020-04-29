@@ -123,13 +123,14 @@ class App
      */
     private function registerEnvironmentVariables()
     {
-        $envs      = [];
-        $envFile   = file_get_contents(__DIR__ . '/../.env');
+        $envFile = __DIR__ . '/../.env';
 
-        if (false === $envFile) {
+        if (!file_exists($envFile)) {
             return false;
         }
 
+        $envs      = [];
+        $envFile   = file_get_contents($envFile);
         $variables = explode(PHP_EOL, $envFile);
 
         foreach ($variables as $variable) {
