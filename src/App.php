@@ -125,6 +125,11 @@ class App
     {
         $envs      = [];
         $envFile   = file_get_contents(__DIR__ . '/../.env');
+
+        if (false === $envFile) {
+            return false;
+        }
+
         $variables = explode(PHP_EOL, $envFile);
 
         foreach ($variables as $variable) {
