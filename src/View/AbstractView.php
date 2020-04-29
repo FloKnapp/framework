@@ -186,12 +186,14 @@ abstract class AbstractView implements ViewInterface
      */
     private function normalizeOutput($output): string
     {
+        $output = str_replace('> <', '><', trim($output));
+
         if (getenv('APPLICATION_ENV') === 'production') {
-            return preg_replace('/(\s{2,}|\t|\r|\n)/', ' ', trim($output));
+            return preg_replace('/(\s{2,}|\t|\r|\n)/', ' ', $output);
         }
 
         // Dev environment
-        return str_replace(["\t", "\r", "\n\n\n"], ' ', trim($output));
+        return str_replace(["\t", "\r", "\n\n\n"], ' ', $output);
     }
 
     /**
