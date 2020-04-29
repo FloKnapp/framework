@@ -6,13 +6,14 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Http\Message\ResponseInterface;
 use Webasics\Framework\DependencyInjection\Container;
+use Webasics\Framework\EventDispatcher\Observer;
 use Webasics\Framework\Route\RouteItem;
-use Webasics\Framework\Exceptions\InitializerException;
-use Webasics\Framework\Exceptions\InvalidResponseException;
+use Webasics\Framework\Route\Exception\InitializerException;
+use Webasics\Framework\Route\Exception\InvalidResponseException;
 use Webasics\Framework\Exceptions\NotFoundException;
-use Webasics\Framework\Helper\ArrayHelper;
 use Webasics\Framework\Route\Dispatcher;
 use Webasics\Framework\Route\Initializer;
+use Webasics\Tests\Fixtures\Controller\TestController;
 
 /**
  * Class DispatcherTest
@@ -26,14 +27,21 @@ class DispatcherTest extends TestCase
 
     public function setUp(): void
     {
+        $observer  = $this->prophesize(Observer::class);
         $container = $this->prophesize(Container::class);
-        $container->has(Argument::any())->willReturn(false);
-        $container->set(Argument::any(), Argument::any())->willReturn(null);
+        $container->get(Argument::is(Observer::class))->willReturn($observer->reveal());
 
         $initializer = $this->prophesize(Initializer::class);
         $initializer->willBeConstructedWith([$container->reveal()]);
 
-        $this->dispatcher = new Dispatcher(new Initializer($container->reveal()));
+        $controller = $this->prophesize(TestController::class);
+        $controller->index()->willReturn($this->prophesize(ResponseInterface::class));
+        $controller->invalidResponse()->willReturn(null);
+        $controller->dynamicPath()->willReturn($this->prophesize(ResponseInterface::class));
+
+        $initializer->loadClass(Argument::is(TestController::class))->willReturn($controller->reveal());
+        $this->dispatcher = new Dispatcher($initializer->reveal());
+        $this->dispatcher->setObserver($observer->reveal());
     }
 
     /**
@@ -65,6 +73,7 @@ class DispatcherTest extends TestCase
      *
      * @throws InvalidResponseException
      * @throws NotFoundException
+     * @throws InitializerException
      */
     public function itShouldThrowExceptionForInvalidResponse()
     {
@@ -78,6 +87,7 @@ class DispatcherTest extends TestCase
      *
      * @throws InvalidResponseException
      * @throws NotFoundException
+     * @throws InitializerException
      */
     public function itShouldThrowExceptionMissingMethod()
     {

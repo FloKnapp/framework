@@ -7,8 +7,11 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Http\Message\ResponseInterface;
+use Webasics\Framework\DependencyInjection\Container;
+use Webasics\Framework\EventDispatcher\Observer;
 use Webasics\Framework\Exceptions\NotFoundException;
 use Webasics\Framework\Route\Dispatcher;
+use Webasics\Framework\Route\Initializer;
 use Webasics\Framework\Route\RouteCollection;
 use Webasics\Framework\Route\RouteItem;
 use Webasics\Framework\Route\Router;
@@ -53,11 +56,15 @@ class RouterTest extends TestCase
      */
     public function setUp(): void
     {
+        $observer = $this->prophesize(Observer::class);
+
         /** @var Dispatcher|ObjectProphecy $dispatcher */
         $dispatcher = $this->prophesize(Dispatcher::class);
+        $dispatcher->getObserver()->willReturn($observer->reveal());
         $dispatcher->forward(Argument::any())->willReturn($this->prophesize(ResponseInterface::class));
 
         $this->router = new Router($dispatcher->reveal(), self::ROUTE_COLLECTION);
+        $this->router->setObserver($observer->reveal());
     }
 
     /**

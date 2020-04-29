@@ -1,6 +1,6 @@
 <?php
 
-namespace Webasics\Framework\Exceptions;
+namespace Webasics\Framework\DependencyInjection\Exception;
 
 use Psr\Container\ContainerExceptionInterface;
 

@@ -20,4 +20,12 @@ trait ContainerAwareTrait
         $this->container = $container;
     }
 
+    /**
+     * @return Container
+     */
+    public function getContainer(): Container
+    {
+        return $this->container;
+    }
+
 }

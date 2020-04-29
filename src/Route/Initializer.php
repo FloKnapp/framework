@@ -3,7 +3,7 @@
 namespace Webasics\Framework\Route;
 
 use Webasics\Framework\DependencyInjection\Container;
-use Webasics\Framework\Exceptions\InitializerException;
+use Webasics\Framework\Route\Exception\InitializerException;
 use Webasics\Framework\Exceptions\NotFoundException;
 
 /**

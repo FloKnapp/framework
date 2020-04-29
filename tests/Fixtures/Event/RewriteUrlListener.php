@@ -5,7 +5,7 @@ namespace Webasics\Tests\Fixtures\Event;
 use Nyholm\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
 use Webasics\Framework\App;
-use Webasics\Framework\Event\EventListenerInterface;
+use Webasics\Framework\EventDispatcher\EventListenerInterface;
 
 /**
  * Class TestListener
@@ -17,7 +17,7 @@ class RewriteUrlListener implements EventListenerInterface
     public static function configure()
     {
         return [
-            App::EVENT_REQUEST_CREATE => [
+            App::EVENT_REQUEST_CREATED => [
                 'onRequestCreate', 10
             ]
         ];

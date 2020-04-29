@@ -1,6 +1,6 @@
 <?php
 
-namespace Webasics\Framework\Event;
+namespace Webasics\Framework\EventDispatcher;
 
 /**
  * Interface ObserverAwareInterface
@@ -11,8 +11,13 @@ interface ObserverAwareInterface
 
     /**
      * @param Observer $observer
-     * @return mixed
+     * @return void
      */
     public function setObserver(Observer $observer);
+
+    /**
+     * @return Observer
+     */
+    public function getObserver(): Observer;
 
 }

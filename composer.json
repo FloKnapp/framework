@@ -21,7 +21,9 @@
         }
     },
     "require": {
+        "ext-dom": "*",
         "ext-json": "*",
+        "ext-curl": "*",
         "tflori/orm": "1.8.*",
         "psr/http-message": "1.0.*",
         "psr/http-factory": "1.0.*",

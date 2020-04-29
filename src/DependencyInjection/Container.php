@@ -13,17 +13,17 @@ class Container implements ContainerInterface
 {
 
     /** @var array */
-    private array $dependencies;
+    private array $storage;
 
     /**
      * @param string $id
-     * @return object
+     * @return mixed
      *
      * @throws NotFoundException
      */
-    public function get($id): object
+    public function get($id)
     {
-        $object = $this->dependencies[$id] ?? null;
+        $object = $this->storage[$id] ?? null;
 
         if (null === $object) {
             throw new NotFoundException('No dependency with id "' . $id . '" found.');
@@ -38,7 +38,7 @@ class Container implements ContainerInterface
      */
     public function has($id): bool
     {
-        return !empty($this->dependencies[$id]);
+        return !empty($this->storage[$id]);
     }
 
     /**
@@ -48,10 +48,10 @@ class Container implements ContainerInterface
      */
     public function set(string $id, object $object, ...$aliases)
     {
-        $this->dependencies[$id] = $object;
+        $this->storage[$id] = $object;
 
         foreach ($aliases as $alias) {
-            $this->dependencies[$alias] = $this->dependencies[$id];
+            $this->storage[$alias] = $this->storage[$id];
         }
     }
 

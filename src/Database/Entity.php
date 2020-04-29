@@ -1,6 +1,6 @@
 <?php
 
-namespace Webasics\Framework\ORM;
+namespace Webasics\Framework\Database;
 
 /**
  * Class Entity

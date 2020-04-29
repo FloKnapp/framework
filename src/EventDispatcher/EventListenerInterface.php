@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Webasics\Framework\Event;
+namespace Webasics\Framework\EventDispatcher;
 
 
 interface EventListenerInterface

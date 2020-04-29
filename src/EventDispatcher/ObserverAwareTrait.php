@@ -1,6 +1,6 @@
 <?php
 
-namespace Webasics\Framework\Event;
+namespace Webasics\Framework\EventDispatcher;
 
 /**
  * Trait ObserverAwareTrait
@@ -17,7 +17,15 @@ trait ObserverAwareTrait
      */
     public function setObserver(Observer $observer)
     {
-        $this->observer = $$observer;
+        $this->observer = $observer;
+    }
+
+    /**
+     * @return Observer
+     */
+    public function getObserver(): Observer
+    {
+        return $this->observer;
     }
 
 }

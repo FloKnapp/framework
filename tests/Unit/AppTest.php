@@ -5,7 +5,7 @@ namespace Webasics\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Webasics\Framework\App;
 use Webasics\Framework\Configuration\Config;
-use Webasics\Framework\Exceptions\InvalidResponseException;
+use Webasics\Framework\Route\Exception\InvalidResponseException;
 use Webasics\Framework\Exceptions\NotFoundException;
 use Webasics\Tests\Fixtures\Event\RewriteUrlListener;
 

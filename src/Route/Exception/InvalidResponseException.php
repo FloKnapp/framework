@@ -1,6 +1,6 @@
 <?php
 
-namespace Webasics\Framework\Exceptions;
+namespace Webasics\Framework\Route\Exception;
 
 class InvalidResponseException extends \Exception
 {

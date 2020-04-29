@@ -6,11 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Webasics\Framework\DependencyInjection\Container;
-use Webasics\Framework\Exceptions\InitializerException;
+use Webasics\Framework\Route\Exception\InitializerException;
 use Webasics\Framework\Route\Initializer;
 use Webasics\Framework\Route\Router;
 use Webasics\Tests\Fixtures\Controller\TestAwareController;
-use Webasics\Tests\Fixtures\Controller\TestAwareMissingMethodsController;
 
 /**
  * Class InitializerTest

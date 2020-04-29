@@ -4,10 +4,11 @@ namespace Webasics\Framework\Route;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Webasics\Framework\Event\ObserverAwareInterface;
-use Webasics\Framework\Event\ObserverAwareTrait;
-use Webasics\Framework\Exceptions\InitializerException;
-use Webasics\Framework\Exceptions\InvalidResponseException;
+use Webasics\Framework\App;
+use Webasics\Framework\EventDispatcher\ObserverAwareInterface;
+use Webasics\Framework\EventDispatcher\ObserverAwareTrait;
+use Webasics\Framework\Route\Exception\InitializerException;
+use Webasics\Framework\Route\Exception\InvalidResponseException;
 use Webasics\Framework\Exceptions\NotFoundException;
 use Webasics\Framework\Helper\ArrayHelper;
 
@@ -63,6 +64,7 @@ class Router implements ObserverAwareInterface
     public function dispatch(RequestInterface $request):? ResponseInterface
     {
         $route = $this->matchPath($request);
+        $this->getObserver()->notify(App::EVENT_ROUTE_DISPATCH, $this->dispatcher);
         return $this->dispatcher->forward($route);
     }
 
@@ -103,6 +105,8 @@ class Router implements ObserverAwareInterface
                 });
 
                 $route->setParameters($params);
+
+                $this->getObserver()->notify(App::EVENT_ROUTE_FOUND, $route);
 
                 return $route;
 
