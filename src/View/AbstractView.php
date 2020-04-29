@@ -186,7 +186,7 @@ abstract class AbstractView implements ViewInterface
      */
     private function normalizeOutput($output): string
     {
-        if (getenv('APPLICATION_ENV') === 'prod') {
+        if (getenv('APPLICATION_ENV') === 'production') {
             return preg_replace('/(\s{2,}|\t|\r|\n)/', ' ', trim($output));
         }
 

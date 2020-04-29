@@ -24,26 +24,14 @@ class ViewTest extends TestCase
      */
     public function itShouldRenderTemplate()
     {
+        putenv('APPLICATION_ENV=production');
+
         $htmlRenderer = new Html();
         $htmlRenderer->setTemplate(__DIR__ . '/../Fixtures/templates/page/index.phtml');
         $htmlRenderer->setVariables(['bla' => 'lol']);
         $result = $htmlRenderer->render();
 
-        $expectedOutput = <<<HTML
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-
-    Erster Test
-
-    Zweiter Test
-
-</body>
-</html>
-HTML;
+        $expectedOutput = '<!DOCTYPE html> <html lang="de"> <head> <meta charset="UTF-8"> </head> <body> Erster Test Zweiter Test </body> </html>';
 
         self::assertSame(
             $expectedOutput,
