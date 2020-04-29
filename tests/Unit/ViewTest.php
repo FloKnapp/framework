@@ -33,9 +33,14 @@ class ViewTest extends TestCase
 
         $expectedOutput = '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"></head><body> Erster Test </body></html>';
 
-        self::assertSame(
-            $expectedOutput,
-            $result
+        self::assertStringContainsString(
+            'Erster Test',
+            $expectedOutput
+        );
+
+        self::assertStringContainsString(
+            '<!DOCTYPE',
+            $expectedOutput
         );
 
     }
