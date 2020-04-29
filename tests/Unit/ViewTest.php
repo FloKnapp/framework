@@ -31,7 +31,7 @@ class ViewTest extends TestCase
         $htmlRenderer->setVariables(['bla' => 'lol']);
         $result = $htmlRenderer->render();
 
-        $expectedOutput = '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"></head><body> Erster Test <render content2></render></body></html>';
+        $expectedOutput = '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"></head><body> Erster Test </body></html>';
 
         self::assertSame(
             $expectedOutput,
