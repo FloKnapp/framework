@@ -35,12 +35,12 @@ class ViewTest extends TestCase
 
         self::assertStringContainsString(
             'Erster Test',
-            $expectedOutput
+            $result
         );
 
         self::assertStringContainsString(
             '<!DOCTYPE',
-            $expectedOutput
+            $result
         );
 
     }
